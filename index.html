@@ -1,27 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <p id="filme"></p>
+    <button onclick="FiltroAlfabetico() ">FiltroAlfabetico</button>
+    <button onclick="FiltroAno() ">FiltroAno</button>
+
+    <select name="genero" id="genero" onselect="GerarTableGenero()">
+        <option value="Ação">Ação</option>
+        <option value="Aventura">Aventura</option>
+        <option value="Infantil">Infantil</option>
+        <option value="Terror">Terror</option>
+        <option value="Thriller">Thriller</option>
+    </select>
+
+    <div id="lista"></div>
 </body>
 <script>
-    listaFilme = []
-    const date = new Date();
 
-    nome = prompt("Digite seu nome: ")
-    ano = prompt("Digite ano: ")
-    genero = prompt("Digite genero: ")
-    duracao = prompt("Digite duracao: ")
+    const listaFilmes = [
+        { nome: "Um Lugar Silencioso", genero: "Terror", ano: 2018, duracao: "1h30" },
+        { nome: "Homem Aranha : Longe de Casa", genero: "Ação", ano: 2019, duracao: "2h10" },
+        { nome: "Velozes e Furiosos 9", genero: "Aventura", ano: 2021, duracao: "2h23" },
+        { nome: "Veículo 19", genero: "Ação", ano: 2013, duracao: "1h22" },
+        { nome: "Corra", genero: "Terror", ano: 2017, duracao: "1h44" },
+        { nome: "Nós", genero: "Terror", ano: 2019, duracao: "2h01" },
+        { nome: "Mad Max: Estrada da Fúria", genero: "Ação", ano: 2015, duracao: "2h00" },
+        { nome: "A Freira", genero: "Terror", ano: 2018, duracao: "1h36" },
+        { nome: "Batman: O Cavaleiro das Trevas", genero: "Ação", ano: 2008, duracao: "2h32" },
+        { nome: "Coringa", genero: "Thriller", ano: 2019, duracao: "2h02" },
+        { nome: "Carros 3", genero: "Infantil", ano: 2017, duracao: "2h09" },
+        { nome: "Toy Story 4", genero: "Infantil", ano: 2019, duracao: "1h40" },
+        { nome: "John Wick 3: Parabellum", genero: "Ação", ano: 2019, duracao: "2h11" },
+        { nome: "Truque de Mestre", genero: "Thriller", ano: 2013, duracao: "1h55" },
+        { nome: "Os Vingadores", genero: "Aventura", ano: 2012, duracao: "2h23" },
+        { nome: "Homem de Ferro", genero: "Ação", ano: 2006, duracao: "2h08" }
+    ]
 
-    alert(date.getDate())
+    let lista = document.getElementById("lista")
 
-    filme = {nome: nome, ano: ano, genero: genero, duracao: duracao}
+    function FiltroAlfabetico() {
+        lista.innerHTML = ""
 
-    let exibe = document.getElementById("filme")
-    exibe.innerText = filme
+        listaFilmes.sort((a, b) => {
+            return a.nome.localeCompare(b.nome);
+        });
+        GerarTable()
+    }
+
+    function FiltroAno() {
+        lista.innerHTML = ""
+
+        listaFilmes.sort((a, b) => {
+            return Number(a.ano) - Number(b.ano);
+        });
+        GerarTable()
+    }
+
+    function GerarTable() {
+        let table = "<table>"
+
+        for (let i = 0; i < listaFilmes.length; i++) {
+            table += `<tr> 
+                <td>${listaFilmes[i].nome} </td> 
+                <td> ${listaFilmes[i].genero} </td> 
+                <td> ${listaFilmes[i].ano} </td> 
+                <td> ${listaFilmes[i].duracao} </td>  
+                <td><button onclick="Alugar(${i})">Alugar</button></td> 
+            </tr>`
+        }
+
+        table += `</table>`
+        lista.innerHTML = table
+    }
+
+    function Alugar(index) {
+        filme = listaFilmes[index]
+        alert(`Voce alugou o filme: ${filme.nome}`)
+    }
+
+    function GerarTableGenero() {
+
+        let listaFiltrada = listaFilmes.forEach(element => {
+            return element.genero == genero
+        });
+
+        let table = "<table>"
+
+        for (let i = 0; i < listaFiltrada.length; i++) {
+            table += `<tr> <td>${listaFiltrada[i].nome} </td> <td> ${listaFiltrada[i].genero} </td> <td> ${listaFiltrada[i].ano} </td> <td> ${listaFiltrada[i].duracao} </td> </tr>`
+        }
+
+        table += `</table>`
+        lista.innerHTML = table
+    }
+
 </script>
+
 </html>
