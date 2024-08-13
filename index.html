@@ -10,16 +10,11 @@
 <body>
     <button onclick="FiltroAlfabetico() ">FiltroAlfabetico</button>
     <button onclick="FiltroAno() ">FiltroAno</button>
-
-    <select name="genero" id="genero" onselect="GerarTableGenero()">
-        <option value="Ação">Ação</option>
-        <option value="Aventura">Aventura</option>
-        <option value="Infantil">Infantil</option>
-        <option value="Terror">Terror</option>
-        <option value="Thriller">Thriller</option>
-    </select>
+    <button onclick="Alugados() ">Alugados</button>
 
     <div id="lista"></div>
+
+    <div id="listaAlugados"></div>
 </body>
 <script>
 
@@ -42,7 +37,10 @@
         { nome: "Homem de Ferro", genero: "Ação", ano: 2006, duracao: "2h08" }
     ]
 
+    let listaAlugados = []
+
     let lista = document.getElementById("lista")
+    let divAlugados = document.getElementById("listaAlugados")
 
     function FiltroAlfabetico() {
         lista.innerHTML = ""
@@ -64,7 +62,7 @@
 
     function GerarTable() {
         let table = "<table>"
-
+            table += `<tr> <th scope="col">Nome</th> <th scope="col">Genero</th> <th scope="col">Ano</th> <th scope="col">Duracao</th> <th scope="col">Alugar</th> </tr>`
         for (let i = 0; i < listaFilmes.length; i++) {
             table += `<tr> 
                 <td>${listaFilmes[i].nome} </td> 
@@ -80,24 +78,45 @@
     }
 
     function Alugar(index) {
-        filme = listaFilmes[index]
-        alert(`Voce alugou o filme: ${filme.nome}`)
+        let data = new Date()
+        let dia = data.getDate()
+        let mes = data.getMonth()
+        let ano = data.getFullYear()
+
+        mes++ //mes que alugou
+        let mesDevolucao = (mes + 1)//mes de devolucao
+        let devolucao = `${dia}/${mesDevolucao}/${ano}`
+        let filme = listaFilmes[index]
+
+        alert(`
+        Filme: ${filme.nome}
+
+        Data de aluguel: ${dia}/${mes}/${ano}
+        Data de devolucao: ${devolucao}
+        `)
+
+        let filmealugado = {nome: filme.nome, genero: filme.genero, ano: filme.ano, duracao: filme.duracao, devolucao: devolucao}
+
+        listaAlugados.push(filmealugado)
     }
 
-    function GerarTableGenero() {
-
-        let listaFiltrada = listaFilmes.forEach(element => {
-            return element.genero == genero
-        });
-
+    function Alugados() {
+        divAlugados.innerHTML = ""
         let table = "<table>"
+        table += `<tr> <th scope="col">Nome</th> <th scope="col">Genero</th> <th scope="col">Ano</th> <th scope="col">Duracao</th> <th scope="col">Data de devolucao</th> </tr>`
 
-        for (let i = 0; i < listaFiltrada.length; i++) {
-            table += `<tr> <td>${listaFiltrada[i].nome} </td> <td> ${listaFiltrada[i].genero} </td> <td> ${listaFiltrada[i].ano} </td> <td> ${listaFiltrada[i].duracao} </td> </tr>`
+        for (let i = 0; i < listaAlugados.length; i++) {
+            table += `<tr> 
+                <td>${listaAlugados[i].nome} </td> 
+                <td> ${listaAlugados[i].genero} </td> 
+                <td> ${listaAlugados[i].ano} </td> 
+                <td> ${listaAlugados[i].duracao} </td>  
+                <td> ${listaAlugados[i].devolucao} </td> 
+            </tr>`
         }
 
         table += `</table>`
-        lista.innerHTML = table
+        divAlugados.innerHTML += table
     }
 
 </script>
